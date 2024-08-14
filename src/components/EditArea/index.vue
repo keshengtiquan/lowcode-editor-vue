@@ -1,9 +1,23 @@
 <template>
-  <div class="h-[100%] edit-area" @mouseover="handleMouseOver" @mouseleave="() => {hoverComponentId = undefined}">
-    <template v-for="vnode in renderComponent(components)" >
+  <div
+    class="h-[100%] edit-area"
+    @mouseover="handleMouseOver"
+    @click="handleClick"
+    @mouseleave="
+      () => {
+        hoverComponentId = undefined;
+      }
+    "
+  >
+    <template v-for="vnode in renderComponent(components)">
       <component :is="vnode"></component>
     </template>
-    <HoverMask v-if="hoverComponentId" :component-id="hoverComponentId" container-class-name="edit-area" portal-wrapper-class-name="portal-wrapper"/>
+    <HoverMask
+      v-if="hoverComponentId"
+      :component-id="hoverComponentId"
+      container-class-name="edit-area"
+      portal-wrapper-class-name="portal-wrapper"
+    />
     <div class="portal-wrapper"></div>
   </div>
 </template>
@@ -17,8 +31,9 @@ import HoverMask from "../HoverMask/index.vue";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
-const { components } = storeToRefs(componentStore);
+const { components, curComponentId } = storeToRefs(componentStore);
 const { componentConfig } = storeToRefs(componentConfigStore);
+const { setCurComponentId } = componentStore;
 
 const hoverComponentId = ref<number>();
 
@@ -43,18 +58,28 @@ function renderComponent(components: Component[]): any {
       renderComponent(component.children || [])
     );
   });
-
-
 }
 
-function handleMouseOver(e: MouseEvent){
-  const path = e.composedPath()
+function handleMouseOver(e: MouseEvent) {
+  const path = e.composedPath();
   for (let i = 0; i < path.length; i++) {
     const ele = path[i] as HTMLElement;
-    const componentId = ele.dataset.componentId
-    if(componentId) {
-      hoverComponentId.value = +componentId
-      return
+    const componentId = ele.dataset.componentId;
+    if (componentId) {
+      hoverComponentId.value = +componentId;
+      return;
+    }
+  }
+}
+
+function handleClick(e: any) {
+  const path = e.composedPath();
+  for (let i = 0; i < path.length; i++) {
+    const ele = path[i] as HTMLElement;
+    const componentId = ele.dataset.componentId;
+    if (componentId) {
+      setCurComponentId(+componentId)
+      return;
     }
   }
 }

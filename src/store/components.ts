@@ -20,6 +20,14 @@ const useComponentStore = defineStore( 'components',() => {
         children: []
     }]);
 
+    const curComponentId = ref<number | null>(null)
+    const curComponent = ref<Component | null>(null)
+
+    function setCurComponentId(componentId: number){
+        curComponentId.value = componentId
+        curComponent.value = getComponentById(componentId, components.value)
+    }
+
     function addComponent(component: Component, parentId?: number){
         if(parentId) {
             const parentComponent = getComponentById(parentId, components.value)
@@ -60,9 +68,12 @@ const useComponentStore = defineStore( 'components',() => {
 
     return {
         components,
+        curComponent,
+        curComponentId,
         addComponent,
         deleteComponent,
-        updateComponent
+        updateComponent,
+        setCurComponentId
     }
 })
 
