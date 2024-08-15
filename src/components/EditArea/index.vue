@@ -55,8 +55,8 @@ function renderComponent(components: Component[]): any {
     return h(
       config.component,
       {
-        key: component.id,
-        id: component.id,
+        key: +component.id,
+        id: +component.id,
         name: component.name,
         drop: true,
         styles: component.styles,

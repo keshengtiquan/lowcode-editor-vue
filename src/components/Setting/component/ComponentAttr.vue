@@ -21,7 +21,7 @@
 import useComponentStore from "@/store/components.ts";
 import useComponentConfigStore from "@/store/componentConfig.ts";
 import {storeToRefs} from "pinia";
-import {watch, ref, onMounted, reactive} from "vue";
+import {watch, ref, reactive} from "vue";
 
 const componentStore = useComponentStore()
 const componentConfigStore = useComponentConfigStore()

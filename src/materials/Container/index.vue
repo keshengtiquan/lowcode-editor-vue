@@ -8,7 +8,7 @@
 import {CSSProperties} from "vue";
 
 defineProps<{
-    id: string,
+    id: number,
     styles: CSSProperties
 }>()
 </script>

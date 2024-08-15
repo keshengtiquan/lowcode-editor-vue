@@ -9,8 +9,8 @@ import {ref} from 'vue'
 const emit = defineEmits(['change'])
 const code = ref(`.comp{\n\t\n}`)
 const extensions = [css()]
-const onChange = () => {
-  emit('change', code.value)
+const onChange = (value: string) => {
+  emit('change', value)
 }
 </script>
 <style scoped>

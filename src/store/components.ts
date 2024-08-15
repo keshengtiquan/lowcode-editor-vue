@@ -67,10 +67,10 @@ const useComponentStore = defineStore( 'components',() => {
         }
     }
     
-    function updateComponentStyles(componentId: number, styles: any){
+    function updateComponentStyles(componentId: number, styles: any, replace?: boolean){
         const component = getComponentById(componentId, components.value);
         if(component) {
-            component.styles = {...component.styles, ...styles}
+            component.styles = replace ? {...styles} : {...component.styles, ...styles}
         }
     }
     

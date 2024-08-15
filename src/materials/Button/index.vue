@@ -6,7 +6,7 @@
 import {CSSProperties} from "vue";
 
 defineProps<{
-    id: string,
+    id: number,
     type?: string,
     text: string,
     styles: CSSProperties
