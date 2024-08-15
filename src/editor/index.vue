@@ -6,7 +6,7 @@
     <div class="flex h-full" @drop="onDrog" @dragstart="onDragStart" @dragenter="onDragEnter"
          @dragover="onDragOver">
       <Material class="w-[300px] border-r-[1px] border-[#000]"/>
-      <EditArea class="flex-1 relative border-r-[1px] border-[#000]"/>
+      <EditArea class="flex-1 relative border-r-[1px] border-[#000] overflow-auto"/>
       <Setting class="w-[300px]"/>
     </div>
   </div>
@@ -41,7 +41,8 @@ const onDrog = (e: DragEvent) => {
     id: new Date().getTime(),
     name: dragElementName.value,
     desc: config.desc,
-    props: config.defaultProps
+    props: config.defaultProps,
+    styles: {}
   }, +componentId)
   // clearDrapStyle()
 }

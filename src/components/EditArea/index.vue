@@ -13,10 +13,16 @@
       <component :is="vnode"></component>
     </template>
     <HoverMask
-      v-if="hoverComponentId"
+      v-if="hoverComponentId && hoverComponentId !== curComponentId"
       :component-id="hoverComponentId"
       container-class-name="edit-area"
       portal-wrapper-class-name="portal-wrapper"
+    />
+    <SelectedMask
+      v-if="curComponentId"
+      portalWrapperClassName="portal-wrapper"
+      containerClassName="edit-area"
+      :componentId="curComponentId"
     />
     <div class="portal-wrapper"></div>
   </div>
@@ -28,6 +34,7 @@ import useComponentStore, { type Component } from "@/store/components";
 import { storeToRefs } from "pinia";
 import { h, ref } from "vue";
 import HoverMask from "../HoverMask/index.vue";
+import SelectedMask from "../SelectedMask/index.vue";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
@@ -52,6 +59,7 @@ function renderComponent(components: Component[]): any {
         id: component.id,
         name: component.name,
         drop: true,
+        styles: component.styles,
         ...config.defaultProps,
         ...component.props,
       },
@@ -78,7 +86,7 @@ function handleClick(e: any) {
     const ele = path[i] as HTMLElement;
     const componentId = ele.dataset.componentId;
     if (componentId) {
-      setCurComponentId(+componentId)
+      setCurComponentId(+componentId);
       return;
     }
   }

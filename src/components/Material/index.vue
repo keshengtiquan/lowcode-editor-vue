@@ -1,5 +1,5 @@
 <template>
-    <div ref="materailRef">
+    <div ref="materialRef">
         <MaterialItem v-for="(item, index) in components" :key="item.name + index" :name="item.name" />
     </div>
 </template>
@@ -17,7 +17,7 @@ const components = computed(() => {
     return Object.values(componentConfig.value).filter(item => item.name !== 'Page')
 })
 
-const materailRef = ref()
+const materialRef = ref()
 
 
 

@@ -1,11 +1,12 @@
 import { getComponentById } from "@/utils";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref} from "vue";
 
 export interface Component {
     id: number;
     name: string;
     props: any;
+    styles?: any;
     children?: Component[];
     parentId?: number;
     desc?: string;
@@ -16,14 +17,15 @@ const useComponentStore = defineStore( 'components',() => {
         id: 1,
         name: 'Page',
         props: {},
+        styles: {},
         desc: '页面',
-        children: []
+        children: [],
     }]);
 
     const curComponentId = ref<number | null>(null)
     const curComponent = ref<Component | null>(null)
 
-    function setCurComponentId(componentId: number){
+    function setCurComponentId(componentId: number | null){
         curComponentId.value = componentId
         curComponent.value = getComponentById(componentId, components.value)
     }
@@ -58,10 +60,17 @@ const useComponentStore = defineStore( 'components',() => {
         } 
     }
 
-    function updateComponent(componentId: number, props: any){
+    function updateComponentProps(componentId: number, props: any){
         const component = getComponentById(componentId, components.value)
         if(component) {
             component.props = {...component.props, ...props}
+        }
+    }
+    
+    function updateComponentStyles(componentId: number, styles: any){
+        const component = getComponentById(componentId, components.value);
+        if(component) {
+            component.styles = {...component.styles, ...styles}
         }
     }
     
@@ -72,8 +81,9 @@ const useComponentStore = defineStore( 'components',() => {
         curComponentId,
         addComponent,
         deleteComponent,
-        updateComponent,
-        setCurComponentId
+        updateComponentProps,
+        setCurComponentId,
+        updateComponentStyles
     }
 })
 
