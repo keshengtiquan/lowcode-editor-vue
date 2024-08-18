@@ -3,11 +3,14 @@
     <div>
       <Header class="h-[60px]"/>
     </div>
-    <div class="flex h-full" @drop="onDrog" @dragstart="onDragStart" @dragenter="onDragEnter"
+    <div v-if="mode === 'edit'" class="flex h-full" @drop="onDrop" @dragstart="onDragStart" @dragenter="onDragEnter"
          @dragover="onDragOver">
-      <Material class="w-[300px] border-r-[1px] border-[#000]"/>
-      <EditArea class="flex-1 relative border-r-[1px] border-[#000] overflow-auto"/>
+      <Material class="w-[300px] border-r-[1px] border-[#e8e9eb]" />
+      <EditArea class="flex-1 p-[15px] bg-[#edeff3] relative border-r-[1px] border-[#e8e9eb]"/>
       <Setting class="w-[300px]"/>
+    </div>
+    <div v-if="mode === 'preview'" class="flex h-full">
+      <Preview />
     </div>
   </div>
 </template>
@@ -17,6 +20,7 @@ import Header from '@/components/Header/index.vue'
 import Material from '@/components/Material/index.vue'
 import EditArea from '@/components/EditArea/index.vue'
 import Setting from '@/components/Setting/index.vue'
+import Preview from '@/components/Prview/index.vue'
 import useComponentStore from '@/store/components'
 import useComponentConfigStore from '@/store/componentConfig'
 import {storeToRefs} from 'pinia'
@@ -26,9 +30,10 @@ const componentStore = useComponentStore()
 const componentConfigStore = useComponentConfigStore()
 const {addComponent} = componentStore
 const {componentConfig} = storeToRefs(componentConfigStore)
+const {mode} = storeToRefs(componentStore)
 const dragElementName = ref('')
 
-const onDrog = (e: DragEvent) => {
+const onDrop = (e: DragEvent) => {
 
   const targetElement = e.target as HTMLElement;
 

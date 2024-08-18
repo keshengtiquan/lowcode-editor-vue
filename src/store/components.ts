@@ -21,7 +21,7 @@ const useComponentStore = defineStore( 'components',() => {
         desc: '页面',
         children: [],
     }]);
-
+    const mode = ref('edit')
     const curComponentId = ref<number | null>(null)
     const curComponent = ref<Component | null>(null)
 
@@ -74,16 +74,22 @@ const useComponentStore = defineStore( 'components',() => {
         }
     }
     
+    function setMode(m: 'edit' | 'preview') {
+        mode.value = m
+    }
+    
 
     return {
         components,
         curComponent,
         curComponentId,
+        mode,
         addComponent,
         deleteComponent,
         updateComponentProps,
         setCurComponentId,
-        updateComponentStyles
+        updateComponentStyles,
+        setMode
     }
 })
 

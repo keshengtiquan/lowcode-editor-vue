@@ -8,13 +8,14 @@
             inline-block
             bg-white
             hover:bg-[#ccc]">
-        {{ name }}
+        {{ desc }}
     </div>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-    name: string
+    name: string,
+    desc: string
 }>()
 
 </script>

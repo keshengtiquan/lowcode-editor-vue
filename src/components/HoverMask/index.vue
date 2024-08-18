@@ -51,7 +51,6 @@ import { computed, onMounted, ref, watch } from "vue";
 import useComponentStore from "@/store/components.ts";
 import { storeToRefs } from "pinia";
 import { getComponentById } from "@/utils";
-import {bus} from "@/utils/eventBus.ts";
 
 const componentStore = useComponentStore();
 const { components } = storeToRefs(componentStore);

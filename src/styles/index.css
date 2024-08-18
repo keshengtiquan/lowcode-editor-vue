@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .material-item {
+        @apply w-[40px] h-[40px] flex justify-center items-center hover:bg-[#EEF3FE] mt-[10px] hover:text-[#2468f2] cursor-pointer
+    }
+}
+
 body {
     height: 100vh;
 }
@@ -9,7 +15,9 @@ body {
 #app {
     height: 100%
 }
-
+svg {
+    vertical-align: initial;
+}
 :root {
-    
+
 }

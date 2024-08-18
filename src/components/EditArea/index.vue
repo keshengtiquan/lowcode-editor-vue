@@ -48,12 +48,12 @@ function renderComponent(components: Component[]): any {
   return components.map((component) => {
     const config = componentConfig.value[component.name];
 
-    if (!config?.component) {
+    if (!config?.dev) {
       return null;
     }
 
     return h(
-      config.component,
+      config.dev,
       {
         key: +component.id,
         id: +component.id,

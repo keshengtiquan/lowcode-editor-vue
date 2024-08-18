@@ -3,27 +3,36 @@
     <a-form ref="formRef" :wrapper-col="{ span: 14 }">
       <a-form-item
         v-for="setter in componentConfig[curComponent!.name].stylesSetter"
-        :label="setter.label" :name="setter.name"
+        :label="setter.label"
+        :name="setter.name"
       >
         <a-input
           v-if="setter.type === 'input'"
           v-model:value="formState[setter.name]"
+          size="small"
         />
         <a-select
           v-if="setter.type === 'select'"
           v-model:value="formState[setter.name]"
           :options="setter.options"
+          size="small"
         />
         <a-input-number
           v-if="setter.type === 'inputNumber'"
           style="width: 100%"
           v-model:value="formState[setter.name]"
+          size="small"
         />
-        {{ setter.name }}
       </a-form-item>
     </a-form>
     <div class="border-[#e8e9eb] border-[1px]">
-      <CssEditor @change="handleCodeChange" />
+      <!-- <CssEditor @change="handleCodeChange" /> -->
+      <Codemirror
+        v-model="code"
+        @change="handleCodeChange"
+        :tab-size="2"
+        :extensions="extensions"
+      />
     </div>
   </div>
 </template>
@@ -33,9 +42,11 @@ import useComponentConfigStore from "@/store/componentConfig.ts";
 import { storeToRefs } from "pinia";
 import { watch, ref, reactive } from "vue";
 import { bus } from "@/utils/eventBus.ts";
-import CssEditor from "@/components/Setting/component/CssEditor.vue";
 import { debounce } from "lodash-es";
 import styleToObject from "style-to-object";
+import { Codemirror } from "vue-codemirror";
+import { css } from "@codemirror/lang-css";
+import { toCSSStr } from "@/utils";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
@@ -44,6 +55,8 @@ const { curComponentId, curComponent } = storeToRefs(componentStore);
 const { componentConfig } = storeToRefs(componentConfigStore);
 const formState = reactive<any>({});
 const formRef = ref<any>();
+const code = ref(`.comp{\n\t\n}`);
+const extensions = [css()];
 
 const handleCodeChange = debounce((value: string) => {
   // console.log(value);
@@ -77,14 +90,19 @@ watch(formState, (newData) => {
 watch(
   () => curComponent.value,
   () => {
-    componentConfig.value[curComponent.value!.name].stylesSetter?.forEach(element => {
-      formState[element.name] = null
-    });
-    console.log('formState',formState);
-    console.log('formState',curComponent.value!.styles);
+    for (const key in formState) {
+      if (formState.hasOwnProperty(key)) {
+        delete formState[key];
+      }
+    }
+    // console.log(formState);
+
     Object.assign(formState, curComponent.value!.styles);
-    
-    
+
+    // console.log(curComponent.value?.styles);
+    // console.log(toCSSStr(curComponent.value?.styles));
+
+    code.value = toCSSStr(curComponent.value?.styles);
   },
   { immediate: true }
 );

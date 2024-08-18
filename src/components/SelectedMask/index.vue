@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, onUnmounted, ref, watch, nextTick} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import useComponentStore from "@/store/components.ts";
 import {storeToRefs} from "pinia";
 import {getComponentById} from "@/utils";

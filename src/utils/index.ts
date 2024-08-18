@@ -1,4 +1,5 @@
 import {Component} from "@/store/components";
+import {kebabCase} from 'lodash-es'
 export function getComponentById(
   id: number | null,
   components: Component[]
@@ -14,13 +15,19 @@ export function getComponentById(
   return null;
 }
 
-export function formatCss(data: any) {
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      if (key === 'width' || key === 'height') {
-        data[key] = data[key] + 'px'
+export function toCSSStr(css: Record<string, any>) {
+  let str = `.comp {\n`;
+  for(let key in css) {
+      let value = css[key];
+      if(!value) {
+          continue;
       }
-    }
+      if(['width', 'height'].includes(key) &&  !value.toString().endsWith('px')) {
+          value += 'px';
+      }
+
+      str += `\t${kebabCase(key)}: ${value};\n`
   }
-  return data
+  str += `}`;
+  return str;
 }

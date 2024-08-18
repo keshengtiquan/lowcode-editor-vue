@@ -1,5 +1,5 @@
 <template>
-    <div ref="pageRef" :data-component-id="id" :style="styles" class="p-[20px] h-[100%]  box-border">
+    <div :style="styles" class="p-[20px]">
         <slot></slot>
     </div>
 </template>
@@ -8,7 +8,7 @@
 import {CSSProperties} from "vue";
 
 defineProps<{
-    id: number
+    id: number,
     styles: CSSProperties
 }>()
 </script>
