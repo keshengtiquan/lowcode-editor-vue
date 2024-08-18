@@ -14,7 +14,7 @@ export interface ComponentConfig {
   defaultProps: Record<string, any>;
   desc: string;
   setter?: ComponentSetter[],
-  stylesSetter?: ComponentSetter[],
+  stylesSetter?: {group: string,title: string, setter: ComponentSetter[]}[],
   dev: any,
   prod: any,
 }

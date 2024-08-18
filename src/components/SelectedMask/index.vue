@@ -2,7 +2,7 @@
   <template v-if="el">
     <Teleport :to="el">
       <div
-          :style="{
+        :style="{
           position: 'absolute',
           left: `${position.left}px`,
           top: `${position.top}px`,
@@ -17,7 +17,7 @@
         }"
       />
       <div
-          :style="{
+        :style="{
           position: 'absolute',
           left: `${position.labelLeft}px`,
           top: `${position.labelTop}px`,
@@ -30,17 +30,16 @@
         }"
       >
         <a-space>
-
           <a-dropdown>
             <div
-                :style="{
-            padding: '0 8px',
-            backgroundColor: 'blue',
-            borderRadius: 4,
-            color: '#fff',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }"
+              :style="{
+                padding: '0 8px',
+                backgroundColor: 'blue',
+                borderRadius: 4,
+                color: '#fff',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }"
             >
               {{ curComponent?.desc }}
             </div>
@@ -52,34 +51,36 @@
               </a-menu>
             </template>
           </a-dropdown>
-          <div v-if="curComponentId !== 1" style="color: #fff; padding: 0 8px; background-color: blue">
+          <div
+            v-if="curComponentId !== 1"
+            style="color: #fff; padding: 0 8px; background-color: blue"
+          >
             <a-popconfirm
-                title="确定删除当前组件?"
-                ok-text="是"
-                cancel-text="否"
-                @confirm="handleDelete"
+              title="确定删除当前组件?"
+              ok-text="是"
+              cancel-text="否"
+              @confirm="handleDelete"
             >
-              <DeleteOutlined/>
+              <DeleteOutlined />
             </a-popconfirm>
           </div>
         </a-space>
-
       </div>
     </Teleport>
   </template>
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, onUnmounted, ref, watch} from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import useComponentStore from "@/store/components.ts";
-import {storeToRefs} from "pinia";
-import {getComponentById} from "@/utils";
-import {DeleteOutlined} from "@ant-design/icons-vue";
-import {bus} from "@/utils/eventBus.ts";
+import { storeToRefs } from "pinia";
+import { getComponentById } from "@/utils";
+import { DeleteOutlined } from "@ant-design/icons-vue";
+import { bus } from "@/utils/eventBus.ts";
 
 const componentStore = useComponentStore();
-const {components, curComponentId} = storeToRefs(componentStore);
-const {deleteComponent, setCurComponentId} = componentStore;
+const { components, curComponentId } = storeToRefs(componentStore);
+const { deleteComponent, setCurComponentId } = componentStore;
 
 const el = ref();
 const position = ref({
@@ -96,7 +97,6 @@ const props = defineProps<{
   portalWrapperClassName: string;
 }>();
 
-
 function updatePosition() {
   if (!props.componentId) return;
 
@@ -104,13 +104,13 @@ function updatePosition() {
   if (!container) return;
 
   const node = document.querySelector(
-      `[data-component-id='${props.componentId}']`
+    `[data-component-id='${props.componentId}']`
   );
   if (!node) return;
 
-  const {top, left, width, height} = node.getBoundingClientRect();
-  const {top: containerTop, left: containerLeft} =
-      container.getBoundingClientRect();
+  const { top, left, width, height } = node.getBoundingClientRect();
+  const { top: containerTop, left: containerLeft } =
+    container.getBoundingClientRect();
 
   let labelTop = top - containerTop + container.scrollTop;
   let labelLeft = left - containerLeft + width;
@@ -129,33 +129,43 @@ function updatePosition() {
   };
 }
 
-bus.on('updatePosition', (value) => {
-  if (value.width && value.width.includes('px') || value.height && value.height.includes('px')) {
+// 修改组件尺寸
+bus.on("updatePosition", (value) => {
+  if (
+    (value.width && value.width.includes("px")) ||
+    (value.height && value.height.includes("px"))
+  ) {
     setTimeout(() => {
-      updatePosition()
-    }, 200)
+      updatePosition();
+    }, 200);
   }
-})
+});
+// 修改组件属性
+bus.on("componentAttr", () => {
+  setTimeout(() => {
+    updatePosition();
+  }, 200);
+});
 
 const menuClick = (data: any) => {
-  setCurComponentId(data.key)
-}
+  setCurComponentId(data.key);
+};
 
 const curComponent = computed(() => {
   return getComponentById(props.componentId, components.value);
 });
 
 const parentComponents = computed(() => {
-  const parentComponents = []
-  let component = curComponent.value
+  const parentComponents = [];
+  let component = curComponent.value;
 
   while (component?.parentId) {
-    component = getComponentById(component.parentId, components.value)
-    parentComponents.push(component)
+    component = getComponentById(component.parentId, components.value);
+    parentComponents.push(component);
   }
 
-  return parentComponents
-})
+  return parentComponents;
+});
 
 const handleDelete = () => {
   deleteComponent(+curComponentId.value!);
@@ -163,26 +173,26 @@ const handleDelete = () => {
 };
 
 watch(
-    () => props.componentId,
-    () => {
-      updatePosition();
-    },
-    {immediate: true}
+  () => props.componentId,
+  () => {
+    updatePosition();
+  },
+  { immediate: true }
 );
 
 watch(components.value, () => {
   updatePosition();
-})
+});
 const resizeHandler = () => {
   updatePosition();
-}
+};
 onMounted(() => {
   el.value = document.querySelector(`.${props.portalWrapperClassName}`)!;
-  window.addEventListener('resize', resizeHandler)
+  window.addEventListener("resize", resizeHandler);
 });
 onUnmounted(() => {
-  window.removeEventListener('resize', resizeHandler)
-})
+  window.removeEventListener("resize", resizeHandler);
+});
 </script>
 
 <style scoped></style>

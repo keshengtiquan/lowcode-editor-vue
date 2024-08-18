@@ -1,5 +1,5 @@
 import dev from "@/materials/Button/dev.vue";
-import prod from "@/materials/Button/prod.vue"
+import prod from "@/materials/Button/prod.vue";
 import { ComponentConfig } from "@/store/componentConfig";
 const button: ComponentConfig = {
   name: "Button",
@@ -29,18 +29,34 @@ const button: ComponentConfig = {
       label: "文本",
       type: "input",
     },
+    {
+      name: "size",
+      label: "尺寸",
+      type: "input",
+    },
   ],
   stylesSetter: [
     {
-      name: "width",
-      label: "宽度",
-      type: "input",
+      group: "layout",
+      title: '布局',
+      setter: [],
     },
     {
-      name: "height",
-      label: "高度",
-      type: "input",
-    },
+      group: 'text',
+      title: '字体',
+      setter: [
+        {
+          name: 'font-size',
+          label: '字号',
+          type: 'inputNumber'
+        },
+        {
+          name: 'line-height',
+          label: '行高',
+          type: 'inputNumber'
+        }
+      ]
+    }
   ],
 };
 
