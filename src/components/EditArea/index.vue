@@ -72,7 +72,7 @@ function handleMouseOver(e: MouseEvent) {
   const path = e.composedPath();
   for (let i = 0; i < path.length; i++) {
     const ele = path[i] as HTMLElement;
-    const componentId = ele.dataset.componentId;
+    const componentId = ele?.dataset?.componentId;
     if (componentId) {
       hoverComponentId.value = +componentId;
       return;

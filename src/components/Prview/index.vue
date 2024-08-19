@@ -29,12 +29,28 @@ function renderComponent(components: Component[]): any {
           styles: component.styles,
           ...config.defaultProps,
           ...component.props,
+          ...handelEvent(component)
         },
         renderComponent(component.children || [])
     );
   });
 }
 
+function handelEvent(component: Component){
+  const props: Record<string, any> = {}
+  componentConfig.value[component.name].events?.forEach((event) => {
+    const eventConfig = component.props[event.name]
+    if(eventConfig) {
+      const {type} = eventConfig
+      props[event.name] = () => {
+        if(type === 'goToLink' && eventConfig.url) {
+          window.location.replace(eventConfig.url)
+        }
+      }
+    }
+  })
+  return props
+}
 </script>
 
 <style scoped>

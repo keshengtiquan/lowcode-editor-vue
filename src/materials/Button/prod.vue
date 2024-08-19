@@ -1,5 +1,5 @@
 <template>
-    <a-button :style="styles" :type="type">{{ text }}</a-button>
+    <a-button :style="styles" :type="type" v-bind="props">{{ text }}</a-button>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +10,7 @@ defineProps<{
     type?: string,
     text: string,
     styles: CSSProperties
+    props: any
 }>()
 </script>
 

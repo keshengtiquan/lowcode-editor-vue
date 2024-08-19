@@ -1,6 +1,7 @@
 import dev from "@/materials/Button/dev.vue";
 import prod from "@/materials/Button/prod.vue";
-import { ComponentConfig } from "@/store/componentConfig";
+import {ComponentConfig} from "@/store/componentConfig";
+
 const button: ComponentConfig = {
   name: "Button",
   defaultProps: {
@@ -16,12 +17,12 @@ const button: ComponentConfig = {
       label: "按钮类型",
       type: "select",
       options: [
-        { label: "主按钮", value: "primary" },
-        { label: "默认", value: "default" },
-        { label: "无边框", value: "ghost" },
-        { label: "线框", value: "dashed" },
-        { label: "链接", value: "link" },
-        { label: "文本", value: "text" },
+        {label: "主按钮", value: "primary"},
+        {label: "默认", value: "default"},
+        {label: "无边框", value: "ghost"},
+        {label: "线框", value: "dashed"},
+        {label: "链接", value: "link"},
+        {label: "文本", value: "text"},
       ],
     },
     {
@@ -58,6 +59,17 @@ const button: ComponentConfig = {
       ]
     }
   ],
+  eventSetter: [
+    {
+      name: 'onClick',
+      label: '点击事件'
+    },
+    {
+      name: 'onDoubleClick',
+      label: '双击事件'
+    }
+  ],
+  events: []
 };
 
 export default button;

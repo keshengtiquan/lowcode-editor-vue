@@ -21,6 +21,7 @@
             <LayoutItem
               v-model:display="formState['display']"
               v-model:padding-top="formState['paddingTop']"
+              v-model:padding-right="formState['paddingRight']"
             />
           </div>
           <a-row v-else :gutter="10">
