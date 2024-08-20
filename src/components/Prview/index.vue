@@ -4,13 +4,13 @@
   </template>
 </template>
 <script setup lang="ts">
-import useComponentStore, {type Component} from "@/store/components.ts";
+import useComponentStore, { type Component } from "@/store/components.ts";
 import useComponentConfigStore from "@/store/componentConfig.ts";
-import {storeToRefs} from "pinia";
-import {h} from "vue";
+import { storeToRefs } from "pinia";
+import { h } from "vue";
 
-const {components} = storeToRefs(useComponentStore())
-const {componentConfig} = storeToRefs(useComponentConfigStore())
+const { components } = storeToRefs(useComponentStore());
+const { componentConfig } = storeToRefs(useComponentConfigStore());
 
 function renderComponent(components: Component[]): any {
   return components.map((component) => {
@@ -21,38 +21,37 @@ function renderComponent(components: Component[]): any {
     }
 
     return h(
-        config.prod,
-        {
-          key: +component.id,
-          id: +component.id,
-          name: component.name,
-          styles: component.styles,
-          ...config.defaultProps,
-          ...component.props,
-          ...handelEvent(component)
-        },
-        renderComponent(component.children || [])
+      config.prod,
+      {
+        key: +component.id,
+        id: +component.id,
+        name: component.name,
+        styles: component.styles,
+        ...config.defaultProps,
+        ...component.props,
+        ...handelEvent(component),
+      },
+      renderComponent(component.children || [])
     );
   });
 }
 
-function handelEvent(component: Component){
-  const props: Record<string, any> = {}
+function handelEvent(component: Component) {
+  const props: Record<string, any> = {};
   componentConfig.value[component.name].events?.forEach((event) => {
-    const eventConfig = component.props[event.name]
-    if(eventConfig) {
-      const {type} = eventConfig
+    const eventConfig = component.props[event.name];
+    if (eventConfig) {
       props[event.name] = () => {
-        if(type === 'goToLink' && eventConfig.url) {
-          window.location.replace(eventConfig.url)
-        }
-      }
+        eventConfig.actions.forEach((action: any) => {
+          if (action.type === "goToLink" && action.url) {
+            window.open(action.url, action.target || '_blank');
+          }
+        });
+      };
     }
-  })
-  return props
+  });
+  return props;
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

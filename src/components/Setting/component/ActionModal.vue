@@ -7,7 +7,7 @@
             执行动作
           </div>
         </div>
-        <a-menu mode="inline" @click="handleMenuClick">
+        <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline" @click="handleMenuClick">
           <a-sub-menu key="page" title="页面">
             <a-menu-item key="goToLink">跳转链接</a-menu-item>
           </a-sub-menu>
@@ -22,7 +22,7 @@
         <span class="text-[12px] text-[#5c5f66] ml-[16px]">跳转至指定链接的页面</span>
         <div class="font-bold mt-[16px] mx-[16px] mb-[12px] text-[12px]">基础设置</div>
         <div class="mx-[16px] p-[16px]">
-          <GoToLink v-if="curAction === 'goToLink'"/>
+          <GoToLink v-if="curAction === 'goToLink'" @change="handleChange"/>
           <a-empty style="color: #5c5f66" description="无配置内容" v-else/>
         </div>
       </div>
@@ -36,8 +36,11 @@ import GoToLink from "@/components/Setting/actions/GoToLink.vue";
 const props = defineProps<{
   open: boolean
 }>()
-const emit = defineEmits(['update:open'])
-const curAction = ref()
+const emit = defineEmits(['update:open', 'submit'])
+const curAction = ref('goToLink')
+const selectedKeys = ref(['goToLink'])
+const openKeys = ref(['page'])
+const curConfig = ref()
 const open = computed({
   set(value: any) {
     emit('update:open', value)
@@ -46,13 +49,18 @@ const open = computed({
     return props.open
   }
 })
+
+const handleChange = (value: any) => {
+  console.log(value);
+  curConfig.value = value
+}
+
 const handleMenuClick = ({key}: {key: string}) => {
-  console.log(key)
   curAction.value = key
 }
 
-const handleOk = (e: MouseEvent) => {
-  console.log(e);
+const handleOk = () => {
+  emit('submit', curConfig.value)
   open.value = false;
 };
 </script>
@@ -75,7 +83,7 @@ const handleOk = (e: MouseEvent) => {
 }
 
 :deep(.ant-menu-inline) {
-  & > .ant-menu-submenu > .ant-menu-submenu-title {
+   > .ant-menu-submenu > .ant-menu-submenu-title {
     height: 30px;
     line-height: 30px;
     margin-inline: 0;
@@ -84,7 +92,7 @@ const handleOk = (e: MouseEvent) => {
     padding-inline: 16px !important;
   }
 
-  & .ant-menu-item {
+   .ant-menu-item {
     height: 30px;
     line-height: 30px;
     margin-inline: 0;

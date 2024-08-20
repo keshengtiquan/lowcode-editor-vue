@@ -1,7 +1,7 @@
 <template>
   <a-form :model="formState" :label-col="{style: { width: '100px' }}" :wrapper-col="{span: 14}">
     <a-form-item label="页面地址">
-      <a-textarea v-model:value="formState.url" :rows="4"/>
+      <a-textarea v-model:value="formState.url" @change='urlChange' :rows="4"/>
     </a-form-item>
     <a-form-item label="打开方式">
       <a-select
@@ -21,11 +21,16 @@
 
 import {reactive} from "vue";
 
+const emit = defineEmits(['change'])
+
 const formState = reactive({
   url: '',
   target: '_blank'
 })
 
+const urlChange = () => {
+  emit('change', {type: 'goToLink', ...formState})
+}
 
 
 </script>
