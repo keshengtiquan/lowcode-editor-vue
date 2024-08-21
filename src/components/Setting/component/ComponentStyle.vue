@@ -65,7 +65,6 @@ const extensions = [css()];
 const activeKey = ref(["1"]);
 
 const handleCodeChange = debounce((value: string) => {
-  // console.log(value);
 
   let css: Record<string, any> = {};
 
@@ -88,11 +87,13 @@ const handleCodeChange = debounce((value: string) => {
   } catch (e) {}
 }, 500);
 
+// 修改属性
 watch(formState, (newData) => {
   updateComponentStyles(+curComponentId.value!, newData);
   bus.emit("updatePosition", newData);
 });
 
+// 组件切换
 watch(
   () => curComponent.value,
   () => {

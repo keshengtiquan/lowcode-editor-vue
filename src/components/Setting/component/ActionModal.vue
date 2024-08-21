@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model:open="open" title="事件动作配置" cancelText="取消" okText="确定" width="50%" @ok="handleOk">
+  <a-modal v-model:open="open" title="事件动作配置" destroyOnClose cancelText="取消" okText="确定" width="50%" @cancel="handleCancel" @ok="handleOk">
     <div class="flex border-[#e8e9eb] border-[1px] rounded-[5px]">
       <div class="w-[150px] h-[480px] border-r-[1px]">
         <div>
@@ -15,14 +15,19 @@
             <a-menu-item key="openModal">打开弹窗</a-menu-item>
             <a-menu-item key="message">消息提醒</a-menu-item>
           </a-sub-menu>
+          <a-sub-menu key="other" title="其他">
+            <a-menu-item key="customJS">自定义JS</a-menu-item>
+          </a-sub-menu>
         </a-menu>
       </div>
       <div class="flex-1">
         <div class="font-bold mt-[16px] mx-[16px] mb-[12px] text-[12px]">动作说明</div>
-        <span class="text-[12px] text-[#5c5f66] ml-[16px]">跳转至指定链接的页面</span>
+        <span class="text-[12px] text-[#5c5f66] ml-[16px]">{{Instructions[curAction]}}</span>
         <div class="font-bold mt-[16px] mx-[16px] mb-[12px] text-[12px]">基础设置</div>
         <div class="mx-[16px] p-[16px]">
-          <GoToLink v-if="curAction === 'goToLink'" @change="handleChange"/>
+          <GoToLink v-if="curAction === 'goToLink'" :default-value="defaultValue" @change="handleChange"/>
+          <Message v-else-if="curAction === 'message'" :default-value="defaultValue" @change="handleChange"/>
+          <CustomJS v-else-if="curAction === 'customJS'" :default-value="defaultValue" @change="handleChange"/>
           <a-empty style="color: #5c5f66" description="无配置内容" v-else/>
         </div>
       </div>
@@ -30,17 +35,28 @@
   </a-modal>
 </template>
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import GoToLink from "@/components/Setting/actions/GoToLink.vue";
+import Message from '../actions/Message.vue'
+import CustomJS from '../actions/CustomJS.vue'
+
+const Instructions: Record<string, string> = {
+  goToLink: '跳转至指定链接的页面',
+  openModal: '打开弹窗，弹窗内支持复杂的交互设计',
+  message: '弹出消息提醒',
+  customJS: '通过JavaScript自定义动作逻辑'
+}
 
 const props = defineProps<{
-  open: boolean
+  open: boolean,
+  action: any
 }>()
-const emit = defineEmits(['update:open', 'submit'])
+const emit = defineEmits(['update:open', 'submit', 'cancel'])
 const curAction = ref('goToLink')
 const selectedKeys = ref(['goToLink'])
-const openKeys = ref(['page'])
+const openKeys = ref(['page', 'modal', 'other'])
 const curConfig = ref()
+const defaultValue = ref()
 const open = computed({
   set(value: any) {
     emit('update:open', value)
@@ -51,7 +67,6 @@ const open = computed({
 })
 
 const handleChange = (value: any) => {
-  console.log(value);
   curConfig.value = value
 }
 
@@ -63,6 +78,25 @@ const handleOk = () => {
   emit('submit', curConfig.value)
   open.value = false;
 };
+
+const handleCancel = () => {
+  emit('cancel')
+}
+
+watch(() => open.value, (newVal) => {
+  console.log(newVal, props.action)
+  if(newVal && props.action) {
+    console.log(85)
+    selectedKeys.value = [props.action.actionType]
+    curAction.value = props.action.actionType
+    const {actionType, ...other} = props.action
+    defaultValue.value = other
+  }else {
+    defaultValue.value = null
+    selectedKeys.value = ['goToLink']
+    curAction.value = 'goToLink'
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -111,7 +145,7 @@ const handleOk = () => {
 
 :deep(.ant-form-item) .ant-form-item-label > label {
   font-size: 12px;
-  height: 20px;
+  //height: 20px;
   color: #5c5f66;
 }
 </style>

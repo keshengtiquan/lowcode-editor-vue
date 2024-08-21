@@ -6,8 +6,12 @@ export interface ComponentSetter {
   name: string;
   label: string;
   type: string;
-  
   [key: string]: any
+}
+
+export interface ComponentMethod {
+  name: string
+  label: string
 }
 
 export interface ComponentEvent {
@@ -23,6 +27,7 @@ export interface ComponentConfig {
   stylesSetter?: { group: string, title: string, setter: ComponentSetter[] }[],
   eventSetter?: ComponentEvent[],
   events?: ComponentEvent[],
+  methods?: ComponentMethod[]
   dev: any,
   prod: any,
 }

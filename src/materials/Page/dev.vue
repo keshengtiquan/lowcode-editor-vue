@@ -1,5 +1,5 @@
 <template>
-    <div ref="pageRef" :data-component-id="id" :style="styles" class="p-[20px] bg-[#fff] h-full box-border">
+    <div :data-component-id="id" :style="styles" class="p-[20px] bg-[#fff] h-full box-border">
         <slot></slot>
     </div>
 </template>

@@ -1,17 +1,17 @@
 <template>
   <div v-if="curComponent">
     <a-dropdown
-      placement="bottom"
-      :trigger="['click']"
-      class="my-[5px]"
-      :arrow="false"
+        placement="bottom"
+        :trigger="['click']"
+        class="my-[5px]"
+        :arrow="false"
     >
       <a-button style="width: 100%">添加事件</a-button>
       <template #overlay>
         <a-menu>
           <a-menu-item
-            v-for="setter in componentConfig[curComponent.name].eventSetter"
-            @click="handleEvent({ name: setter.name, label: setter.label })"
+              v-for="setter in componentConfig[curComponent.name].eventSetter"
+              @click="handleEvent({ name: setter.name, label: setter.label })"
           >
             {{ setter.label }}
           </a-menu-item>
@@ -19,42 +19,36 @@
       </template>
     </a-dropdown>
     <a-collapse
-      class="mt-2"
-      v-model:activeKey="activeKey"
-      expand-icon-position="end"
-      :bordered="false"
+        class="mt-2"
+        v-model:activeKey="activeKey"
+        expand-icon-position="end"
+        :bordered="false"
     >
       <a-collapse-panel
-        v-for="event in componentConfig[curComponent.name].events"
-        :key="event.name"
-        :header="event.label"
+          v-for="event in componentConfig[curComponent.name].events"
+          :key="event.name"
+          :header="event.label"
       >
         <div v-if="curComponent.props[event.name]?.actions.length > 0">
           <div
-            class="bg-[#f7f7f9] p-3 mt-[5px] rounded-[5px]"
-            v-for="(item, index) in curComponent.props[event.name].actions"
-            :key="index"
+              class="bg-[#f7f7f9] p-2 mt-[5px] rounded-[5px]"
+              v-for="(item, index) in curComponent.props[event.name].actions"
+              :key="index"
           >
-            <div v-if="item.type === 'goToLink'">
-              <div class="flex justify-between">
-                <span class="leading-[20px]">跳转链接</span>
-                <div class="text-[#f62c2c]">
-                  <SettingOutlined class="mr-1 cursor-pointer"/>
-                  <DeleteOutlined class="cursor-pointer"/>
-                </div>
-              </div>
-              <div class="text-[#84868c]">
-                跳转至 <span class="text-blue-500">{{ item.url }}</span>
-              </div>
-            </div>
+            <ActionsItem :action="item" @delete="deleteAction(event, index)" @edit="editAction(item)">
+              <span v-if="item.actionType ==='goToLink'">跳转至 <span class="text-blue-500">{{ item.url }}</span></span>
+              <span v-if="item.actionType ==='message'">提示消息 <span class="text-blue-500">{{
+                  item.content
+                }}</span></span>
+            </ActionsItem>
           </div>
         </div>
         <template #extra>
-          <PlusOutlined @click.stop="openModal(event)" />
+          <PlusOutlined @click.stop="openModal(event)"/>
         </template>
       </a-collapse-panel>
     </a-collapse>
-    <ActionModal v-model:open="actionModalOpen" @submit="onSubmit" />
+    <ActionModal v-model:open="actionModalOpen" :action="curAction" @cancel="onCancel" @submit="onSubmit"/>
   </div>
 </template>
 <script setup lang="ts">
@@ -64,22 +58,22 @@ import useComponentConfigStore, {
 } from "@/store/componentConfig.ts";
 import {
   PlusOutlined,
-  SettingOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons-vue";
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import {storeToRefs} from "pinia";
+import {ref} from "vue";
 import ActionModal from "@/components/Setting/component/ActionModal.vue";
+import ActionsItem from "@/components/Setting/actions/actionsItem.vue";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
-const { updateComponentProps } = componentStore;
-const { curComponentId, curComponent } = storeToRefs(componentStore);
-const { componentConfig } = storeToRefs(componentConfigStore);
-const { addEvent } = componentConfigStore;
+const {updateComponentProps} = componentStore;
+const {curComponentId, curComponent} = storeToRefs(componentStore);
+const {componentConfig} = storeToRefs(componentConfigStore);
+const {addEvent} = componentConfigStore;
 const activeKey = ref(["1"]);
 const actionModalOpen = ref(false);
 const curEvent = ref<ComponentEvent>();
+const curAction = ref<any>()
 
 const handleEvent = (event: any) => {
   addEvent(curComponent.value!.name, event);
@@ -100,7 +94,28 @@ const onSubmit = (value: any) => {
       ],
     },
   });
+  curAction.value = null
 };
+
+const onCancel = () => {
+  curAction.value = null
+}
+
+const deleteAction = (event: ComponentEvent, index: number) => {
+  if (!event) return
+  const actions = curComponent.value?.props[event.name].actions
+  actions.splice(index, 1)
+  updateComponentProps(curComponent.value!.id, {
+    [event.name]: {
+      actions: actions
+    }
+  })
+}
+
+const editAction = (config: any) => {
+  curAction.value = config
+  actionModalOpen.value = true;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -111,6 +126,7 @@ const onSubmit = (value: any) => {
 
 .ant-collapse > :deep(.ant-collapse-item:last-child) > .ant-collapse-header {
   border-radius: 0;
+
   .ant-collapse-expand-icon {
     height: 18px;
   }
@@ -125,6 +141,7 @@ const onSubmit = (value: any) => {
   border-top: 1px solid #d4d6d9;
   border-bottom: 1px solid #d4d6d9;
 }
+
 :deep(.ant-collapse-borderless) > .ant-collapse-item > .ant-collapse-content {
   background-color: #fff;
 }

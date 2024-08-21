@@ -61,11 +61,11 @@ const button: ComponentConfig = {
   ],
   eventSetter: [
     {
-      name: 'onClick',
+      name: 'onclick',
       label: '点击事件'
     },
     {
-      name: 'onDoubleClick',
+      name: 'ondblclick',
       label: '双击事件'
     }
   ],

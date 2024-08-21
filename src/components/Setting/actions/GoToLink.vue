@@ -21,15 +21,19 @@
 
 import {reactive} from "vue";
 
+const props = defineProps<{
+  defaultValue: {url: string, target: string}
+}>()
+
 const emit = defineEmits(['change'])
 
 const formState = reactive({
-  url: '',
-  target: '_blank'
+  url: props.defaultValue?.url || '',
+  target: props.defaultValue?.target || '_blank'
 })
 
 const urlChange = () => {
-  emit('change', {type: 'goToLink', ...formState})
+  emit('change', {actionType: 'goToLink', ...formState})
 }
 
 

@@ -5,6 +5,7 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import * as path from "path";
 import { createSvgIconsPlugin} from 'vite-plugin-svg-icons'
 
+
 // https://vitejs.dev/config/
 export default (configEnv: ConfigEnv): UserConfigExport  => {
   return {
