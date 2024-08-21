@@ -7,4 +7,11 @@ export default {
   dev: devContainer,
   prod: prodContainer,
   desc: "容器",
+  stylesSetter: [
+    {
+      group: "layout",
+      title: "布局",
+      setter: [],
+    },
+  ],
 };

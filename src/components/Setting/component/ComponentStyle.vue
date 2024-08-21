@@ -20,8 +20,14 @@
           <div v-if="stylesSetter.group === 'layout'">
             <LayoutItem
               v-model:display="formState['display']"
+              v-model:margin-top="formState['marginTop']"
+              v-model:margin-right="formState['marginRight']"
+              v-model:margin-bottom="formState['marginBottom']"
+              v-model:margin-left="formState['marginLeft']"
               v-model:padding-top="formState['paddingTop']"
               v-model:padding-right="formState['paddingRight']"
+              v-model:padding-bottom="formState['paddingBottom']"
+              v-model:padding-left="formState['paddingLeft']"
             />
           </div>
           <a-row v-else :gutter="10">
@@ -109,7 +115,7 @@ watch(
   { immediate: true }
 );
 </script>
-<style scoped>
+<style lang="scss" scoped>
 :deep(.ant-row) {
   justify-content: space-between !important;
 }
@@ -122,5 +128,9 @@ watch(
 }
 :deep(.ant-collapse-content-box) {
   padding: 5px !important;
+}
+
+:deep(.ant-collapse-item) > .ant-collapse-header {
+  padding: 5px;
 }
 </style>
