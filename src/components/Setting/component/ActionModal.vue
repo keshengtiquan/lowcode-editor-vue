@@ -28,6 +28,7 @@
           <GoToLink v-if="curAction === 'goToLink'" :default-value="defaultValue" @change="handleChange"/>
           <Message v-else-if="curAction === 'message'" :default-value="defaultValue" @change="handleChange"/>
           <CustomJS v-else-if="curAction === 'customJS'" :default-value="defaultValue" @change="handleChange"/>
+          <OpenModal v-else-if="curAction === 'openModal'" :default-value="defaultValue" @change="handleChange"/>
           <a-empty style="color: #5c5f66" description="无配置内容" v-else/>
         </div>
       </div>
@@ -39,6 +40,7 @@ import {computed, ref, watch} from "vue";
 import GoToLink from "@/components/Setting/actions/GoToLink.vue";
 import Message from '../actions/Message.vue'
 import CustomJS from '../actions/CustomJS.vue'
+import OpenModal from '../actions/OpenModal.vue'
 
 const Instructions: Record<string, string> = {
   goToLink: '跳转至指定链接的页面',

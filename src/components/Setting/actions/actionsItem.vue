@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between ">
+    <div class="flex justify-between h-[25px]">
       <span class="leading-[20px]">{{ title }}</span>
       <div class="text-[#84868b]">
         <SettingOutlined @click="emit('edit')" class="mr-1 cursor-pointer"/>
@@ -23,7 +23,8 @@ const props = defineProps<{
 const titleMap: Record<string, string> = {
   goToLink: '跳转链接',
   message: '消息提醒',
-  customJS: '自定义JS'
+  customJS: '自定义JS',
+  openModal: '打开弹窗'
 }
 const title = computed(() => {
   return titleMap[props.action.actionType]

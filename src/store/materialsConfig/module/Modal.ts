@@ -27,7 +27,17 @@ const Modal: ComponentConfig = {
   ],
   desc: '弹窗',
   dev: ModalDev,
-  prod: ModalProd
+  prod: ModalProd,
+  methods: [
+    {
+      name: 'openModal',
+      label: '打开弹窗'
+    },
+    {
+      name: 'closeModal',
+      label: '关闭弹窗'
+    }
+  ]
 }
 
 export default Modal

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-[100%] edit-area"
+    class="edit-area"
     @mouseover="handleMouseOver"
     @click="handleClick"
     @mouseleave="
@@ -62,6 +62,7 @@ function renderComponent(components: Component[]): any {
         styles: component.styles,
         ...config.defaultProps,
         ...component.props,
+        'data-effect': 'move'
       },
       renderComponent(component.children || [])
     );

@@ -23,6 +23,7 @@ export interface ComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
   desc: string;
+  attrSetter?: {group: string, title: string, setter: ComponentSetter[]}[],
   setter?: ComponentSetter[],
   stylesSetter?: { group: string, title: string, setter: ComponentSetter[] }[],
   eventSetter?: ComponentEvent[],

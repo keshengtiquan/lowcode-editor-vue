@@ -40,6 +40,7 @@
               <span v-if="item.actionType ==='message'">提示消息 <span class="text-blue-500">{{
                   item.content
                 }}</span></span>
+              <span v-if="item.actionType === 'openModal'">打开弹窗 <span class="text-blue-500">{{ item.config.componentId }}</span></span>
             </ActionsItem>
           </div>
         </div>

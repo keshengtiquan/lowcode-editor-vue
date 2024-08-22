@@ -7,11 +7,12 @@
 import useComponentStore, {type Component} from "@/store/components.ts";
 import useComponentConfigStore from "@/store/componentConfig.ts";
 import {storeToRefs} from "pinia";
-import {h} from "vue";
+import {h, nextTick, ref} from "vue";
 import {message} from "ant-design-vue";
 
 const {components} = storeToRefs(useComponentStore());
 const {componentConfig} = storeToRefs(useComponentConfigStore());
+const componentRefs = ref<Record<string, any>>({})
 
 function renderComponent(components: Component[]): any {
   return components.map((component) => {
@@ -31,6 +32,11 @@ function renderComponent(components: Component[]): any {
           ...config.defaultProps,
           ...component.props,
           ...handelEvent(component),
+          ref: (ref: Record<string, any>) => {
+            nextTick(() => {
+              componentRefs.value[component.id] = ref
+            })
+          }
         },
         renderComponent(component.children || [])
     );
@@ -44,6 +50,7 @@ function handelEvent(component: Component) {
     if (eventConfig) {
       props[event.name] = () => {
         eventConfig.actions.forEach((action: any) => {
+          console.log(action)
           if (action.actionType === "goToLink" && action.url) {
             window.open(action.url, action.target || '_blank');
           }
@@ -59,15 +66,20 @@ function handelEvent(component: Component) {
               showMessage(action.content, action.duration);
             }
           }
-          if(action.actionType ==='customJS'){
-            const func = new Function('context',action.code)
+          if (action.actionType === 'customJS') {
+            const func = new Function('context', action.code)
             func({
               name: component.name,
               props: component.props,
-              showMessage(content: string){
+              showMessage(content: string) {
                 message.success(content)
               }
             })
+          }
+          if (action.actionType === 'openModal') {
+            const component = componentRefs.value[action.config.componentId]
+            console.log(component[action.config.method])
+            component[action.config.method]?.()
           }
         });
       };

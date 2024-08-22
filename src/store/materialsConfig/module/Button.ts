@@ -11,31 +11,38 @@ const button: ComponentConfig = {
   dev: dev,
   prod: prod,
   desc: "按钮",
-  setter: [
-    {
-      name: "type",
-      label: "按钮类型",
-      type: "select",
-      options: [
-        {label: "主按钮", value: "primary"},
-        {label: "默认", value: "default"},
-        {label: "无边框", value: "ghost"},
-        {label: "线框", value: "dashed"},
-        {label: "链接", value: "link"},
-        {label: "文本", value: "text"},
-      ],
-    },
-    {
-      name: "text",
-      label: "文本",
-      type: "input",
-    },
-    {
-      name: "size",
-      label: "尺寸",
-      type: "input",
-    },
-  ],
+  attrSetter: [{
+    group: 'base',
+    title: '基本',
+    setter: [
+      {
+        name: "type",
+        label: "按钮类型",
+        type: "select",
+        options: [
+          {label: "主按钮", value: "primary"},
+          {label: "默认", value: "default"},
+          {label: "无边框", value: "ghost"},
+          {label: "线框", value: "dashed"},
+          {label: "链接", value: "link"},
+          {label: "文本", value: "text"},
+        ],
+        group: '基本'
+      },
+      {
+        name: "text",
+        label: "文本",
+        type: "input",
+        group: '基本'
+      },
+      {
+        name: "size",
+        label: "尺寸",
+        type: "input",
+        group: '基本'
+      },
+    ]
+  }],
   stylesSetter: [
     {
       group: "layout",

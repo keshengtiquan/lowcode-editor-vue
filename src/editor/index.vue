@@ -1,16 +1,14 @@
 <template>
-  <div class="flex flex-col h-full">
-    <div>
-      <Header class="h-[60px]"/>
-    </div>
+  <div class="flex flex-col h-[100vh]">
+    <Header class="h-[60px] relative bg-[#fff] z-50"/>
     <div v-if="mode === 'edit'" class="flex h-full" @drop="onDrop" @dragstart="onDragStart" @dragenter="onDragEnter"
          @dragover="onDragOver">
-      <Material class="w-[300px] border-r-[1px] border-[#e8e9eb]" />
-      <EditArea class="flex-1 p-[15px] bg-[#edeff3] relative border-r-[1px] border-[#e8e9eb]"/>
+      <Material class="w-[300px] border-r-[1px] border-[#e8e9eb]"/>
+      <EditArea class="flex-1 bg-[#edeff3] relative border-r-[1px] border-[#e8e9eb]"/>
       <Setting class="w-[300px]"/>
     </div>
     <div v-if="mode === 'preview'" class="flex h-full">
-      <Preview />
+      <Preview/>
     </div>
   </div>
 </template>
@@ -25,16 +23,18 @@ import useComponentStore from '@/store/components'
 import useComponentConfigStore from '@/store/componentConfig'
 import {storeToRefs} from 'pinia'
 import {ref} from 'vue'
+import {getComponentById} from "@/utils";
 
 const componentStore = useComponentStore()
 const componentConfigStore = useComponentConfigStore()
-const {addComponent} = componentStore
+const {addComponent, deleteComponent} = componentStore
+const {components} = storeToRefs(componentStore)
 const {componentConfig} = storeToRefs(componentConfigStore)
 const {mode} = storeToRefs(componentStore)
 const dragElementName = ref('')
+const moveComponentId = ref<number>()
 
 const onDrop = (e: DragEvent) => {
-
   const targetElement = e.target as HTMLElement;
 
   if (!dragElementName.value) return
@@ -42,13 +42,21 @@ const onDrop = (e: DragEvent) => {
 
   const config = componentConfig.value[dragElementName.value]
   const componentId = targetElement.dataset.componentId!
-  addComponent({
-    id: new Date().getTime(),
-    name: dragElementName.value,
-    desc: config.desc,
-    props: config.defaultProps,
-    styles: {}
-  }, +componentId)
+
+  if (e.dataTransfer!.effectAllowed === 'move') {
+    const component = getComponentById(moveComponentId.value!, components.value)
+    deleteComponent(moveComponentId.value!)
+    addComponent(component!, +componentId)
+  } else {
+    addComponent({
+      id: new Date().getTime(),
+      name: dragElementName.value,
+      desc: config.desc,
+      props: config.defaultProps,
+      styles: {}
+    }, +componentId)
+  }
+
   // clearDrapStyle()
 }
 const onDragOver = (e: DragEvent) => {
@@ -58,6 +66,11 @@ const onDragOver = (e: DragEvent) => {
 }
 const onDragStart = (e: DragEvent) => {
   const targetElement = e.target as HTMLElement;
+  if (targetElement.dataset.effect && targetElement.dataset.effect === 'move') {
+    e.dataTransfer!.effectAllowed = 'move'
+    console.log(e)
+    moveComponentId.value = +targetElement.dataset.componentId!
+  }
 
   const type = targetElement.getAttribute('name')!
   if (type === 'Page') {

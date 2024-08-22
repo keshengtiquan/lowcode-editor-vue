@@ -51,6 +51,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import useComponentStore from "@/store/components.ts";
 import { storeToRefs } from "pinia";
 import { getComponentById } from "@/utils";
+import {bus} from "@/utils/eventBus.ts";
 
 const componentStore = useComponentStore();
 const { components } = storeToRefs(componentStore);
@@ -92,8 +93,8 @@ function updatePosition() {
     labelTop -= -20;
   }
   position.value = {
-    top: top - containerTop + container.scrollTop,
-    left: left - containerLeft + container.scrollTop,
+    top: top - containerTop - container.scrollTop,
+    left: left - containerLeft - container.scrollTop,
     width,
     height,
     labelTop,
@@ -104,7 +105,9 @@ function updatePosition() {
 const curComponent = computed(() => {
   return getComponentById(props.componentId, components.value);
 });
-
+bus.on('pageScroll', () => {
+  updatePosition();
+})
 watch(
   () => props.componentId,
   () => {

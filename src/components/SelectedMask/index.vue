@@ -147,6 +147,10 @@ bus.on("componentAttr", () => {
   }, 200);
 });
 
+bus.on('pageScroll', () => {
+  updatePosition();
+})
+
 const menuClick = (data: any) => {
   setCurComponentId(data.key);
 };
