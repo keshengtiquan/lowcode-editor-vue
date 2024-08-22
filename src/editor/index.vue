@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col h-[100vh]">
-    <Header class="h-[60px] relative bg-[#fff] z-50"/>
+    <div>
+      <Header class="h-[60px] relative bg-[#fff] z-50"/>
+    </div>
     <div v-if="mode === 'edit'" class="flex h-full" @drop="onDrop" @dragstart="onDragStart" @dragenter="onDragEnter"
          @dragover="onDragOver">
       <Material class="w-[300px] border-r-[1px] border-[#e8e9eb]"/>

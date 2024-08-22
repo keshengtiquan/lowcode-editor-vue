@@ -7,11 +7,17 @@ const Modal: ComponentConfig = {
   defaultProps: {
     title: '弹窗',
   },
-  setter: [
+  attrSetter: [
     {
-      name: 'title',
-      label: '标题',
-      type: 'input',
+      group: 'base',
+      title: '基础',
+      setter: [
+        {
+          name: 'title',
+          label: '标题',
+          type: 'input',
+        }
+      ]
     }
   ],
   stylesSetter: [],

@@ -12,7 +12,6 @@ export default () => {
     const obj:Record<string, ComponentConfig> = {}
   for (const materialConfig of Object.values(modules)) {
     const config = (materialConfig as ConfigType)?.default ?? [];
-    console.log(config);
     obj[config.name] = config
   }
 

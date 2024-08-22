@@ -14,11 +14,23 @@ const Table: ComponentConfig = {
       }
     ]
   },
-  setter: [
+  attrSetter: [
     {
-      name: 'request',
-      label: '请求地址',
-      type: 'input'
+      group: 'base',
+      title: '基础',
+      setter: [
+        {
+          name: 'request',
+          label: '请求地址',
+          type: 'input'
+        }
+      ]
+    },
+    {
+      group: 'tableColumn',
+      title: '列设置',
+      setter: [
+      ]
     }
   ],
   dev: TableDev,

@@ -1,5 +1,5 @@
 <template>
-    <div id="page" :data-component-id="id" :style="styles" class="aa  overflow-scroll bg-[#fff]">
+    <div id="page" :data-component-id="id" :style="styles" class="aa  overflow-auto bg-[#fff]">
         <slot></slot>
     </div>
 </template>

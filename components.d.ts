@@ -37,7 +37,6 @@ declare module 'vue' {
     ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     ComponentAttr: typeof import('./src/components/Setting/component/ComponentAttr.vue')['default']
     ComponentEvent: typeof import('./src/components/Setting/component/ComponentEvent.vue')['default']
-    ComponentMethod: typeof import('./src/components/Setting/actions/ComponentMethod.vue')['default']
     ComponentStyle: typeof import('./src/components/Setting/component/ComponentStyle.vue')['default']
     CustomJS: typeof import('./src/components/Setting/actions/CustomJS.vue')['default']
     EditArea: typeof import('./src/components/EditArea/index.vue')['default']
@@ -45,7 +44,7 @@ declare module 'vue' {
     Header: typeof import('./src/components/Header/index.vue')['default']
     HoverMask: typeof import('./src/components/HoverMask/index.vue')['default']
     LayoutItem: typeof import('./src/components/Setting/component/LayoutItem.vue')['default']
-    Material: typeof import('./src/components/Material/Material.vue')['default']
+    Material: typeof import('./src/components/Material/index.vue')['default']
     MaterialItem: typeof import('./src/components/Material/MaterialItem.vue')['default']
     Message: typeof import('./src/components/Setting/actions/Message.vue')['default']
     OpenModal: typeof import('./src/components/Setting/actions/OpenModal.vue')['default']
@@ -56,5 +55,6 @@ declare module 'vue' {
     Setting: typeof import('./src/components/Setting/index.vue')['default']
     Source: typeof import('./src/components/Material/Source.vue')['default']
     SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
+    TableColumn: typeof import('./src/components/Setting/component/TableColumn.vue')['default']
   }
 }
