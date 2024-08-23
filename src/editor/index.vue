@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col h-[100vh]">
     <div>
-      <Header class="h-[60px] relative bg-[#fff] z-50"/>
+      <Header class="h-[60px] relative bg-[#fff] z-40"/>
     </div>
     <div v-if="mode === 'edit'" class="flex h-full" @drop="onDrop" @dragstart="onDragStart" @dragenter="onDragEnter"
          @dragover="onDragOver">
       <Material class="w-[300px] border-r-[1px] border-[#e8e9eb]"/>
       <EditArea class="flex-1 bg-[#edeff3] relative border-r-[1px] border-[#e8e9eb]"/>
-      <Setting class="w-[300px]"/>
+      <Setting class="w-[300px] relative"/>
     </div>
     <div v-if="mode === 'preview'" class="flex h-full">
       <Preview/>

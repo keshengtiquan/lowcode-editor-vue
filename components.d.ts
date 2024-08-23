@@ -44,7 +44,7 @@ declare module 'vue' {
     Header: typeof import('./src/components/Header/index.vue')['default']
     HoverMask: typeof import('./src/components/HoverMask/index.vue')['default']
     LayoutItem: typeof import('./src/components/Setting/component/LayoutItem.vue')['default']
-    Material: typeof import('./src/components/Material/index.vue')['default']
+    Material: typeof import('./src/components/Material/Material.vue')['default']
     MaterialItem: typeof import('./src/components/Material/MaterialItem.vue')['default']
     Message: typeof import('./src/components/Setting/actions/Message.vue')['default']
     OpenModal: typeof import('./src/components/Setting/actions/OpenModal.vue')['default']

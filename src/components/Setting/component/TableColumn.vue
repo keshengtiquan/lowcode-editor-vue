@@ -4,24 +4,44 @@
       ><PlusOutlined />添加列</a-button
     >
     <ul ref="el">
-        <li
-          class="flex items-center justify-center mb-[5px]"
-          v-for="(column, index) in curComponent?.props.columns"
-          :key="column.key + new Date().getTime()"
-        >
-          <a-space>
-            <EditOutlined class="cursor-pointer" />
-            <a-input size="small" v-model:value="column.title" />
-            <a-input
-              size="small"
-              v-model:value="column.dataIndex"
-              @blur="dataIndexChange"
-            />
-            <DeleteOutlined @click="deleteColumn(index)" class="cursor-pointer" />
-            <HolderOutlined class="cursor-grabbing handle" />
-          </a-space>
-        </li>
+      <li
+        v-for="(column, index) in localColumns"
+        class="flex items-center justify-center mb-[5px]"
+      >
+        <a-space>
+          <EditOutlined
+            @click="
+              () => {
+                if (editColumn == index) {
+                  showColumnSetting = !showColumnSetting;
+                } else {
+                  editColumn = index;
+                }
+              }
+            "
+            class="cursor-pointer"
+          />
+          <a-input
+            size="small"
+            v-model:value="column.title"
+            @change="titleChange"
+          />
+          <a-input
+            size="small"
+            v-model:value="column.dataIndex"
+            @change="(e: any) => dataIndexChange(index, e)"
+          />
+          <DeleteOutlined @click="deleteColumn(index)" class="cursor-pointer" />
+          <HolderOutlined class="cursor-grabbing handle" />
+        </a-space>
+      </li>
     </ul>
+    <div
+      v-if="showColumnSetting"
+      class=" absolute top-0 left-[-300px] z-50 w-[300px] h-full bg-blue-500"
+    >
+      {{ localColumns[editColumn] }}
+    </div>
   </div>
 </template>
 
@@ -35,42 +55,59 @@ import {
 import useComponentStore from "@/store/components";
 import { storeToRefs } from "pinia";
 import { useDraggable } from "vue-draggable-plus";
-import { nextTick, ref } from "vue";
+import { ref, watch } from "vue";
 
 const componentStore = useComponentStore();
-const { curComponent, curComponentId } = storeToRefs(componentStore);
+const { curComponentId } = storeToRefs(componentStore);
 const { updateComponentProps } = componentStore;
+const showColumnSetting = ref<boolean>(false);
+const emit = defineEmits(["update:columns"]);
+const editColumn = ref<number>(0);
 
-const el = ref()
-useDraggable(el, curComponent.value?.props.columns, {
-  animation: 50,
-  handle: '.handle',
-  onEnd: async() => {
-    await nextTick()
-  }
-})
+const props = defineProps<{
+  columns: any[];
+}>();
+const localColumns = ref([...props.columns]);
+const el = ref();
+const onDragEnd = () => {
+  updateComponentProps(curComponentId.value!, { columns: localColumns.value });
+};
+useDraggable(el, localColumns, {
+  animation: 150,
+  handle: ".handle",
+  onEnd: onDragEnd,
+});
+
+watch(
+  () => props.columns,
+  (newColumns) => {
+    localColumns.value = [...newColumns];
+  },
+  { deep: true }
+);
 
 const addColumn = () => {
-  const newColumn = {
-    title: "newTitle",
-    dataIndex: "newTitle",
-    key: "newTitle",
-  };
-  curComponent.value?.props.columns.push(newColumn);
+  localColumns.value.push({
+    title: "新增列",
+    dataIndex: "newColumn",
+    key: "newColumn",
+  });
+  updateComponentProps(curComponentId.value!, { columns: localColumns.value });
 };
 
-const dataIndexChange = (e: any) => {
-  const index = curComponent.value?.props.columns.findIndex(
-    (item: any) => item.dataIndex === e.target.value
-  );
-  if (index != -1) {
-    curComponent.value!.props.columns[index].key = e.target.value;
-  }
+const titleChange = () => {
+  updateComponentProps(curComponentId.value!, { columns: localColumns.value });
+};
+
+const dataIndexChange = (index: number, e: any) => {
+  localColumns.value[index].key = e.target.value;
+  updateComponentProps(curComponentId.value!, { columns: localColumns.value });
 };
 
 const deleteColumn = (index: number) => {
-    curComponent.value!.props.columns.splice(index, 1)
-}
+  localColumns.value.splice(index, 1);
+  updateComponentProps(curComponentId.value!, { columns: localColumns.value });
+};
 </script>
 
 <style scoped></style>

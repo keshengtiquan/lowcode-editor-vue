@@ -24,7 +24,7 @@
           :key="index + 2"
           :header="attrSetter.title"
         >
-          <TableColumn v-if="attrSetter.group === 'tableColumn'" />
+          <TableColumn v-if="attrSetter.group === 'tableColumn'" :columns="cloneDeep(curComponent?.props.columns)"   />
           <a-row v-else :gutter="10">
             <a-col v-for="setter in attrSetter.setter" :span="setter.col || 24">
               <a-form-item :label="setter.label" :name="setter.name">
@@ -48,6 +48,7 @@ import { watch, ref, reactive } from "vue";
 import { bus } from "@/utils/eventBus";
 import RenderFormItem from "./RenderFormItem.vue";
 import TableColumn from "./TableColumn.vue";
+import { cloneDeep } from "lodash-es";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
@@ -64,15 +65,22 @@ const activeKey = ref(["1"]);
 
 watch(formState, (newData) => {
   updateComponentProps(+curComponentId.value!, newData);
+
   bus.emit("componentAttr");
 });
 
 watch(
   () => curComponent.value,
   () => {
+    for (const key in formState) {
+      if (formState.hasOwnProperty(key)) {
+        formState[key] = "";
+      }
+    }
     formState.id = curComponent.value!.id;
     formState.name = curComponent.value!.name;
     formState.desc = curComponent.value!.desc;
+
     Object.assign(formState, curComponent.value!.props);
   },
   { immediate: true }

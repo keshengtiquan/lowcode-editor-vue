@@ -30,6 +30,11 @@ const Table: ComponentConfig = {
       group: 'tableColumn',
       title: '列设置',
       setter: [
+        {
+          name: 'columns',
+          label: '列设置',
+          type: 'columns'
+        }
       ]
     }
   ],

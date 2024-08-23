@@ -1,17 +1,20 @@
 <template>
-  <div :data-component-id="id" :style="styles" class="w-full border-[1px] border-[#000]">
-    <a-table>
-      <slot></slot>
+  <div  :style="styles" >
+    <a-table :columns="columns">
     </a-table>
   </div>
 </template>
 <script setup lang="ts">
 import {CSSProperties} from "vue";
 
-defineProps<{
-  id: number,
+const props = defineProps<{
   styles: CSSProperties,
+  columns: any[],
+  request: string
 }>()
+
+console.log(props.request);
+
 </script>
 
 <style scoped>
