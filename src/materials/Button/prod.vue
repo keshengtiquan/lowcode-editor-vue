@@ -1,5 +1,5 @@
 <template>
-    <a-button :style="styles" :type="type">{{ text }}</a-button>
+    <a-button :style="styles" :type="type">{{ text }}<slot name="icon"></slot></a-button>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import store from './store'
+import * as antIcons from '@ant-design/icons-vue'
 
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -33,5 +34,10 @@ import 'ant-design-vue/dist/reset.css';
 import 'animate.css'
 
 const app = createApp(App)
+
+for (const [key, component] of Object.entries(antIcons)) {
+  app.component(key, component)
+}
+
 app.use(store)
 app.mount('#app')

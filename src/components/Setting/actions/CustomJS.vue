@@ -5,16 +5,19 @@
 import {onBeforeUnmount, onMounted, ref} from "vue";
 import * as monaco from 'monaco-editor'
 
-const props = defineProps<{
-  defaultValue?: {code: string}
-}>()
+const props = withDefaults(defineProps<{
+  defaultValue?: {code: string},
+  language?: string
+}>(), {
+  language: 'javascript'
+}) 
 const monacoEditor = ref()
 let editor: monaco.editor.IStandaloneCodeEditor
 const emit = defineEmits(['change'])
 const init = () => {
   editor = monaco.editor.create(monacoEditor.value, {
     value: props.defaultValue?.code || '',
-    language: 'javascript',
+    language: props.language,
     minimap: {
       enabled: false
     },

@@ -88,7 +88,6 @@ const handleCancel = () => {
 watch(() => open.value, (newVal) => {
   console.log(newVal, props.action)
   if(newVal && props.action) {
-    console.log(85)
     selectedKeys.value = [props.action.actionType]
     curAction.value = props.action.actionType
     const {actionType, ...other} = props.action

@@ -7,7 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ABadge: typeof import('ant-design-vue/es')['Badge']
+    ABadgeRibbon: typeof import('ant-design-vue/es')['BadgeRibbon']
     AButton: typeof import('ant-design-vue/es')['Button']
+    ACard: typeof import('ant-design-vue/es')['Card']
     ACol: typeof import('ant-design-vue/es')['Col']
     ACollapse: typeof import('ant-design-vue/es')['Collapse']
     ACollapsePanel: typeof import('ant-design-vue/es')['CollapsePanel']
@@ -35,6 +38,7 @@ declare module 'vue' {
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     ATree: typeof import('ant-design-vue/es')['Tree']
     ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
+    CodeEditor: typeof import('./src/components/Setting/component/CodeEditor.vue')['default']
     ComponentAttr: typeof import('./src/components/Setting/component/ComponentAttr.vue')['default']
     ComponentEvent: typeof import('./src/components/Setting/component/ComponentEvent.vue')['default']
     ComponentStyle: typeof import('./src/components/Setting/component/ComponentStyle.vue')['default']
@@ -44,9 +48,10 @@ declare module 'vue' {
     Header: typeof import('./src/components/Header/index.vue')['default']
     HoverMask: typeof import('./src/components/HoverMask/index.vue')['default']
     LayoutItem: typeof import('./src/components/Setting/component/LayoutItem.vue')['default']
-    Material: typeof import('./src/components/Material/Material.vue')['default']
+    Material: typeof import('./src/components/Material/index.vue')['default']
     MaterialItem: typeof import('./src/components/Material/MaterialItem.vue')['default']
     Message: typeof import('./src/components/Setting/actions/Message.vue')['default']
+    MonacoEditor: typeof import('./src/components/MonacoEditor/index.vue')['default']
     OpenModal: typeof import('./src/components/Setting/actions/OpenModal.vue')['default']
     Outline: typeof import('./src/components/Material/Outline.vue')['default']
     Prview: typeof import('./src/components/Prview/index.vue')['default']

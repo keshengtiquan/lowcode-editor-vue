@@ -24,7 +24,10 @@
           :key="index + 2"
           :header="attrSetter.title"
         >
-          <TableColumn v-if="attrSetter.group === 'tableColumn'" :columns="cloneDeep(curComponent?.props.columns)"   />
+          <TableColumn
+            v-if="attrSetter.group === 'tableColumn'"
+            :columns="cloneDeep(curComponent?.props.columns)"
+          />
           <a-row v-else :gutter="10">
             <a-col v-for="setter in attrSetter.setter" :span="setter.col || 24">
               <a-form-item :label="setter.label" :name="setter.name">
@@ -38,6 +41,35 @@
         </a-collapse-panel>
       </a-collapse>
     </a-form>
+    <a-collapse
+      v-model:activeKey="activeKey"
+      expand-icon-position="end"
+      :bordered="false"
+    >
+      <a-collapse-panel key="" header="插槽">
+        <div
+          class="flex items-center justify-start"
+          v-for="slot in componentConfig[formState.name].slots"
+          :key="slot.name"
+        >
+          <span class="w-3/5 text-[14px]"
+            >{{ slot.label }} -- {{ slot.name }}</span
+          >
+          <a-button
+            @click="
+              codeEditorRef.showModal(
+                `<template #${slot.name}${
+                  slot.params ? `='{${slot.params.join(',')}}'` : ''
+                }>\n\t\n</template>`,
+                slot.name
+              )
+            "
+            >编辑代码</a-button
+          >
+        </div>
+      </a-collapse-panel>
+    </a-collapse>
+    <CodeEditor ref="codeEditorRef" @submit="onCodeSubmit" />
   </div>
 </template>
 <script setup lang="ts">
@@ -49,10 +81,11 @@ import { bus } from "@/utils/eventBus";
 import RenderFormItem from "./RenderFormItem.vue";
 import TableColumn from "./TableColumn.vue";
 import { cloneDeep } from "lodash-es";
+import CodeEditor from "./CodeEditor.vue";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
-const { updateComponentProps } = componentStore;
+const { updateComponentProps, updateComponentSlots } = componentStore;
 const { curComponentId, curComponent } = storeToRefs(componentStore);
 const { componentConfig } = storeToRefs(componentConfigStore);
 const formState = reactive<any>({
@@ -62,6 +95,7 @@ const formState = reactive<any>({
 });
 const formRef = ref();
 const activeKey = ref(["1"]);
+const codeEditorRef = ref();
 
 watch(formState, (newData) => {
   updateComponentProps(+curComponentId.value!, newData);
@@ -85,6 +119,10 @@ watch(
   },
   { immediate: true }
 );
+
+const onCodeSubmit = (value: string) => {
+  updateComponentSlots(+curComponentId.value!, [value])
+};
 </script>
 <style lang="scss" scoped>
 :deep(.ant-row) {
@@ -126,6 +164,7 @@ watch(
 
 :deep(.ant-collapse-borderless) > .ant-collapse-item {
   border-bottom: none;
+
   > .ant-collapse-content {
     background-color: #fff;
   }

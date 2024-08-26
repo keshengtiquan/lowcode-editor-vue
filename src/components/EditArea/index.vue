@@ -32,9 +32,11 @@
 import useComponentConfigStore from "@/store/componentConfig";
 import useComponentStore, { type Component } from "@/store/components";
 import { storeToRefs } from "pinia";
-import { h, ref } from "vue";
+import { h, nextTick, ref } from "vue";
 import HoverMask from "../HoverMask/index.vue";
 import SelectedMask from "../SelectedMask/index.vue";
+import { Button } from "ant-design-vue";
+import { EnterOutlined } from "@ant-design/icons-vue";
 
 const componentStore = useComponentStore();
 const componentConfigStore = useComponentConfigStore();
@@ -62,9 +64,12 @@ function renderComponent(components: Component[]): any {
         styles: component.styles,
         ...config.defaultProps,
         ...component.props,
-        'data-effect': 'move'
+        "data-effect": "move",
       },
-      renderComponent(component.children || [])
+      {
+        default: renderComponent(component.children || []),
+        ...handleSlot(component),
+      }
     );
   });
 }
@@ -91,6 +96,16 @@ function handleClick(e: any) {
       return;
     }
   }
+}
+function handleSlot(component: Component) {
+  const slots: Record<string, any> = {}
+  component.slots?.forEach(item => {
+    const renderFunction = new Function('h','EnterOutlined', `return ${item.code};`)
+    slots[item.name] = () => {
+      return renderFunction(h, EnterOutlined)
+    }
+  })
+  return slots;
 }
 </script>
 

@@ -13,6 +13,7 @@
     "@codemirror/lang-css": "^6.2.1",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",
+    "@vue/compiler-sfc": "^3.4.38",
     "@vue/shared": "^3.4.36",
     "@vueuse/core": "^10.11.0",
     "animate.css": "^4.1.1",

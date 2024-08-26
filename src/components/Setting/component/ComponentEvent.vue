@@ -35,7 +35,7 @@
               v-for="(item, index) in curComponent.props[event.name].actions"
               :key="index"
           >
-            <ActionsItem :action="item" @delete="deleteAction(event, index)" @edit="editAction(item)">
+            <ActionsItem :action="item" @delete="deleteAction(event, index)" @edit="editAction(item, event)">
               <span v-if="item.actionType ==='goToLink'">跳转至 <span class="text-blue-500">{{ item.url }}</span></span>
               <span v-if="item.actionType ==='message'">提示消息 <span class="text-blue-500">{{
                   item.content
@@ -113,7 +113,8 @@ const deleteAction = (event: ComponentEvent, index: number) => {
   })
 }
 
-const editAction = (config: any) => {
+const editAction = (config: any, event: any) => {
+  curEvent.value = event;
   curAction.value = config
   actionModalOpen.value = true;
 }

@@ -39,7 +39,13 @@ const Table: ComponentConfig = {
     }
   ],
   dev: TableDev,
-  prod: TableProd
+  prod: TableProd,
+  eventSetter: [
+    {
+      name: 'onResizeColumn',
+      label: '拖动列事件'
+    },
+  ],
 }
 
 export default Table

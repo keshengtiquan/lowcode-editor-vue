@@ -19,6 +19,12 @@ export interface ComponentEvent {
   label: string
 }
 
+export interface ComponentSlot {
+  name: string,
+  label: string,
+  params?: string[]
+}
+
 export interface ComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
@@ -31,6 +37,7 @@ export interface ComponentConfig {
   methods?: ComponentMethod[]
   dev: any,
   prod: any,
+  slots?: ComponentSlot[]
 }
 
 const useComponentConfigStore = defineStore("componentConfig", () => {

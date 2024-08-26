@@ -1,5 +1,8 @@
 <template>
-    <a-button draggable="true" :data-component-id="id" :style="styles" :type="type">{{ text }}</a-button>
+    <a-button draggable="true" :data-component-id="id" :style="styles" :type="type">
+        <slot name="icon"></slot>
+        {{ text }}
+    </a-button>
 </template>
 
 <script setup lang="ts">
