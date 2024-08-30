@@ -38,12 +38,15 @@ const moveComponentId = ref<number>()
 
 const onDrop = (e: DragEvent) => {
   const targetElement = e.target as HTMLElement;
-
+  console.log(targetElement)
+  console.log(dragElementName.value)
+  console.log(targetElement.getAttribute('name'))
   if (!dragElementName.value) return
-  if (!targetElement.getAttribute('name')) return
+  if (!targetElement.getAttribute('name') && !targetElement.dataset.name) return
 
   const config = componentConfig.value[dragElementName.value]
   const componentId = targetElement.dataset.componentId!
+  console.log(config, componentId)
 
   if (e.dataTransfer!.effectAllowed === 'move') {
     const component = getComponentById(moveComponentId.value!, components.value)
@@ -75,6 +78,7 @@ const onDragStart = (e: DragEvent) => {
   }
 
   const type = targetElement.getAttribute('name')!
+
   if (type === 'Page') {
     dragElementName.value = ''
   } else {

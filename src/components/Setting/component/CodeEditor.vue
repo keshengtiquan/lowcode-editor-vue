@@ -8,18 +8,16 @@
     title="编辑代码"
     @ok="handleOk"
   >
-  <!-- <component :is="handleSolt"/> -->
     <MonacoEditor
       @change="onCodeChange"
+      language="html"
       :defaultValue="defaultValue"
     />
   </a-modal>
 </template>
 <script setup lang="ts">
-import {  h, ref } from "vue";
+import { ref } from "vue";
 import MonacoEditor from "@/components/MonacoEditor/index.vue";
-import { Button } from "ant-design-vue";
-import { EnterOutlined } from "@ant-design/icons-vue";
 const open = ref<boolean>(false);
 
 const defaultValue = ref("");
@@ -41,16 +39,12 @@ const showModal = (value: string, name: string) => {
 
 const handleOk = () => {
   open.value = false;
+  console.log(code.value)
+  console.log(defaultValue.value)
   emit("submit", { name: slotName.value, code: code.value });
 };
 
-// const handleSolt = () => {
-//   const hstring = 'h(Button, null, {default: [],icon: () => h(EnterOutlined)})'
-//   const renderFunction = new Function('h','Button','EnterOutlined', `return ${hstring};`);
-// console.log(renderFunction(h, Button, EnterOutlined));
 
-//   return renderFunction(h, Button, EnterOutlined)
-// };
 
 defineExpose({ showModal });
 </script>

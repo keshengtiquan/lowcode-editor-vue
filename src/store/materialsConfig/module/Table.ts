@@ -46,6 +46,18 @@ const Table: ComponentConfig = {
       label: '拖动列事件'
     },
   ],
+  slots: [
+    {
+      name: 'headerCell',
+      label: '表头',
+      params: ['column', 'record']
+    },
+    {
+      name: "bodyCell",
+      label: "单元格",
+      params: ['column', 'record']
+    },
+  ],
 }
 
 export default Table
